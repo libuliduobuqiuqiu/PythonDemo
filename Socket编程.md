@@ -89,7 +89,7 @@ while True:
 （但是存在一个问题：当突然大量请求连接，消耗系统资源达到上限后，很可能造成程序无法处理后续请求。）
 
 **socketserver模块：**
-```pytthon
+```python
 # -*- coding: utf-8 -*-
 
 from socketserver import BaseRequestHandler, StreamRequestHandler
