@@ -149,15 +149,14 @@ def request_handler():
 	content_list = book_content.split("\n")
 	for content in content_list:
 		if content:
-			sock_client.send((content).encode())
-			time.sleep(2)
+			# 要在每段发送的内容结尾加上换行符，用于StreamRequestHandler识别	
+			sock_client.send((content+"\n").encode())
+			time.sleep(1)
 			response = sock_client.recv(8192)
 			print(response)
 
 	end_time = time.time()
 	print("总共耗时:", end_time-start_time)
-
-		
 
 if __name__ == "__main__":
 	request_handler()
@@ -167,54 +166,75 @@ if __name__ == "__main__":
 ### UDP Socket
 **Socket模块：**
 ```python
+# -*- coding: utf-8
+
 from socket import socket, AF_INET, SOCK_DGRAM
-import time
 
-def time_server(address):
-    sock = socket(AF_INET, SOCK_DGRAM)
-    sock.bind(address)
 
-    while True:
-        msg, addr = sock.recvfrom(8192)
-        print('Get message from', addr)
-        resp = time.ctime()
-        sock.sendto(resp.encode('ascii'), addr)
+def echo_handler(address):
+	server = socket(AF_INET, SOCK_DGRAM)
+	server.bind(address)
+	
+	while True:
+		msg, addr = server.recvfrom(8192)
+		if not msg:
+			break
+
+		print(f"Got Message From: {addr} \n {msg}")
+		server.sendto(msg, addr)
 
 if __name__ == "__main__":
-    time_server(('', 5000))
+	echo_handler(("", 8888))
 ```
 > 代码不详解，和之前的差不多，注意不同的协议就完事了
 
 客户端测试：
 ```python
+# -*- coding: utf-8 -*-
+
 from socket import socket, AF_INET, SOCK_DGRAM
+import time
+
+
+def request_handler(addr):
+	client = socket(AF_INET, SOCK_DGRAM)
+	
+	book_content = ""
+	with open("send_books.txt", "r") as f:
+		book_content = f.read()
+
+	book_list = book_content.split("\n")
+	for content in book_list:
+		if content:
+			client.sendto(content.encode(), addr)
+			response = client.recv(8192)
+			print(response)
+		time.sleep(1)
 
 if __name__ == "__main__":
-    s = socket(AF_INET, SOCK_DGRAM)
-    s.sendto(b'hello', ('localhost', 5000))
-    text = s.recvfrom(8192)
-    print(text)
+	addr = ("localhost", 8888)
+	request_handler(addr)
 ```
 
 **socketserver模块：**
 ```python
+# -*- coding: utf-8 -*-
 from socketserver import BaseRequestHandler, UDPServer
-import time
 
+class EchoHandler(BaseRequestHandler):
 
-class TimeHandler(BaseRequestHandler):
-    def handle(self):
-        print("Got Connection %s".format(str(self.client_address)))
-        data = self.request[0]
-        print(data)
-        msg, sock = self.request
-        print(msg)
-        data = time.ctime()
-        sock.sendto(data.encode('ascii'), self.client_address)
+	def handle(self):
+		print(f"Got Connections From: {self.client_address}")	
+
+		data, sock = self.request
+		print(data)
+
+		if data:
+			sock.sendto(data, self.client_address)
 
 if __name__ == "__main__":
-    u = UDPServer(("localhost", 9999), TimeHandler)
-    u.serve_forever()
+	server = UDPServer(("", 8888), EchoHandler)
+	server.serve_forever()
 ```
 > 代码不在赘述，如果需要多线程处理并发操作可以使用ThreadingUDPServer
 
