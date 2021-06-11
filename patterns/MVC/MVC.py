@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+# MVC模式
+
 
 quotes = ('A man is not complete until he is married. Then he is finished.',
         'As I said before, I never repeat myself.',

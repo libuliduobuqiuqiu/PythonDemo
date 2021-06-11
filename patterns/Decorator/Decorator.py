@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+# 装饰器模式
 
 def memorize(func):
     known = {}
