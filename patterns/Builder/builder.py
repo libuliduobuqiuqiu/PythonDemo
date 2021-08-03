@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# 建造者模式
 import uuid
 
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# 适配器模式
 
 
 class Computer:

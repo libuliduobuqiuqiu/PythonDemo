@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# 外观模式
 
 from abc import ABCMeta, abstractmethod
 from enum import Enum

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# 享元模式
 
 import random
 from enum import Enum

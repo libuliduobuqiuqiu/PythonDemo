@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+# 原型模式
 from collections import OrderedDict
 import copy
 
