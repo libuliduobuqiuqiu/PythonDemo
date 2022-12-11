@@ -1,4 +1,12 @@
 # Python Template
 
 __pycache__/
+
+# Pycharm个性化配置
 .idea/
+
+# 配置文件
+setting.py
+
+# 虚拟环境
+venv/*

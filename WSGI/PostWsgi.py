@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from wsgiref.simple_server import make_server
-from cgi import parse_qs
+from urllib.parse import parse_qs
 from faker import Faker
 import json
 
 
 def application(environ, start_response):
     f = Faker()
-    wsgi_input = environ["wsgi.input"]
+    headers = [("Content-Type", "application/json")]
 
+    wsgi_input = environ["wsgi.input"]
     try:
         content_length = int(environ.get("CONTENT_LENGTH", 0))
     except (ValueError):
@@ -18,7 +19,6 @@ def application(environ, start_response):
     request_json = json.loads(request_body.decode("utf8"))
 
     status = "200 OK"
-    headers = [("Content-Type", "application/json")]
     start_response(status, headers)
 
     name = request_json.get("name", "")
