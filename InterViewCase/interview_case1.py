@@ -83,3 +83,11 @@ if __name__ == "__main__":
     c = ChainMap(a, b)
     print(c['x'], c['z'])
 
+    tmp1 = "https://www.baidu.com"
+    tmp2 = "http://www.qq.com"
+    tmp3 = "ftps://10.21.12.1"
+
+    choices = ["http:", "https:", "ftp:"]
+    for i in [tmp1, tmp2, tmp3]:
+        if i.startswith(tuple(choices)):
+            print("success: ", i)
