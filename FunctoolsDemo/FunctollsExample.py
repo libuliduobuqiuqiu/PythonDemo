@@ -38,10 +38,19 @@ def gen_read_file(file_name: str):
         for tmp in f:
             yield tmp
 
+
+def spam(a, b, c, d):
+    print(a,b,c,d)
+
+
 if __name__ == "__main__":
+
+    s1 = partial(spam, b=2, c=3, d=4)
+    s1(1)
+
     # open_partial_file("D:\\Backup\\test.txt", 12)
 
     # search_all_files("D:\\Download")
-
-    for i in gen_read_file("D:\\Backup\\test.txt"):
-        print(i)
+    #
+    # for i in gen_read_file("D:\\Backup\\test.txt"):
+    #     print(i)
