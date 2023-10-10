@@ -58,9 +58,27 @@ class Node:
             yield from c.depth_first()
 
 
-if __name__ == "__main__":
-    a = [1,2,3,4,5,1,2,3]
-    b = [3,4,1,5,1,2,3,1000]
+_formats = {
+    'ymd': '{d.year}-{d.month}-{d.day}',
+    'mdy': '{d.month}/{d.day}/{d.year}',
+    'dmy': '{d.day}/{d.month}/{d.year}'
+}
 
-    for i in chain(a, b):
-        print(i)
+
+class MyDate:
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+    def __format__(self, code):
+        if code == "":
+            code = "ymd"
+
+        fmt = _formats[code]
+        return fmt.format(d=self)
+
+
+if __name__ == "__main__":
+    a = MyDate(year=2023, month=9, day=23)
+    print(format(a, "mdy"))
