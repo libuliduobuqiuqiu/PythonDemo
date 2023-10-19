@@ -3,6 +3,8 @@ import inspect
 import operator
 from inspect import Parameter, Signature
 
+from CollectionsDemo import *
+
 
 def make_sig(*names):
     params = [Parameter(name, Parameter.POSITIONAL_OR_KEYWORD) for name in names]
@@ -91,3 +93,11 @@ if __name__ == "__main__":
 
     print(s, s.name, s.price)
     print(p)
+
+    a = A()
+    b = B()
+    a.print_bar()
+    b.Print_Bar()
+
+
+1
