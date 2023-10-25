@@ -3,7 +3,7 @@
 """
     :date: 2023-10-19
     :author: linshukai
-    :description: About socket client
+    :description: About SocketDemo client
 """
 
 from socket import AF_INET, SOCK_STREAM, SOCK_DGRAM
@@ -31,7 +31,7 @@ def udp_client():
     s = socket(AF_INET, SOCK_DGRAM)
     s.connect(("localhost", 8992))
 
-    s.send(b'hello,world\nsocket demo')
+    s.send(b'hello,world\nSocketDemo demo')
     msg = s.recv(8192)
     print(f"Got msg: {msg}")
     s.close()

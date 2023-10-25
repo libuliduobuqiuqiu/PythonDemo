@@ -3,7 +3,7 @@ import inspect
 import operator
 from inspect import Parameter, Signature
 
-from CollectionsDemo import *
+from StandardLib.collectionsDemo import *
 
 
 def make_sig(*names):

@@ -2,7 +2,7 @@
 """
     :date: 2023-10-24
     :author: linshukai
-    :description: About Lazy Connection about socket
+    :description: About Lazy Connection about SocketDemoSocketDemo demo
 """
 
 from socket import AF_INET, SOCK_STREAM, socket
