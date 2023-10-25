@@ -1,29 +1,44 @@
 # -*- coding: utf-8 -*-
+import concurrent.futures
+from unittest import TestCase
+from concurrent.futures import ThreadPoolExecutor
 
-from unittest import TextTestRunner, TestSuite
-from unittest import TestLoader
-
-import HtmlTestRunner
 import unittest
-import math
-import pytest
 import logging
+import threading
+import warnings
 
 
+class MyTest(TestCase):
+    _num = 0
 
-def test_num():
-    """
-    测试统计内容
-    :param a:
-    :return:
-    """
-    logging.warn("asuccess")
-    assert len([1]) == 1
+    def setUp(self) -> None:
+        self.logger = logging.getLogger(__name__)
+
+    def add(self):
+        self._num += 1
+
+    def sub(self):
+        self._num -= 1
+
+    def count(self):
+        self.add()
+        self.sub()
+        self.logger.info(self._num)
+        self.logger.info(f"活跃的线程:{threading.active_count()}")
+
+    def test_correct_num(self):
+        with ThreadPoolExecutor(128) as pool:
+            all_task = [pool.submit(self.count) for _ in range(200)]
+
+        concurrent.futures.wait(all_task)
+        self.assertEquals(self._num, 0)
 
 
-def test_count():
-    """
-    测试统计
-    :return:
-    """
-    assert len([1, 2, 3]) != 3
+def use_logfile(logfile=None):
+    if logfile is not None:
+        warnings.warn('logfile argument deprecated', DeprecationWarning)
+
+
+if __name__ == "__main__":
+    unittest.main()
