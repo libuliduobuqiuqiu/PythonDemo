@@ -39,8 +39,9 @@ def hello_world():
     print("world")
 
 
+def next_word(a, b,  *, x, y):
+    print(a, b, x, y)
+
+
 if __name__ == "__main__":
-    with time_block("counting"):
-        n = 1000000
-        while n > 0:
-            n -= 1
+    next_word(1, 2, x=3, y=4)
