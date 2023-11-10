@@ -18,6 +18,7 @@ def connect_device(host: str, username: str, password: str, cmd: str) -> str:
 
 
 if __name__ == "__main__":
-    from setting import HOST, USERNAME, PASSWORD
-    output = connect_device(HOST, USERNAME, PASSWORD, "df -h")
+    from setting import AliyunSetting
+
+    output = connect_device(AliyunSetting.HOST, AliyunSetting.USERNAME, AliyunSetting.PASSWORD, "df -h")
     print(output)
