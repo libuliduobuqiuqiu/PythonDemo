@@ -7,6 +7,10 @@
 
 
 def selection_sort(unsort_list: list):
+    """
+    时间复杂度：O(n^2)
+    空间复杂度：O(1)
+    """
     index = 0
 
     while index < len(unsort_list) - 1:

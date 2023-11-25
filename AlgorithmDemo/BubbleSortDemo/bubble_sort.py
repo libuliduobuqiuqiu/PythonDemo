@@ -7,6 +7,10 @@
 
 
 def bubble_sort(unsort_list: list):
+    """
+    时间复杂度：O(n^2)
+    空间复杂度：O(1)
+    """
     if len(unsort_list) < 1:
         return
 

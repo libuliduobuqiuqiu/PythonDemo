@@ -7,13 +7,17 @@
 
 
 def quick_sort(unsort_list: list):
-    if len(unsort_list) <= 0:
+    """
+    时间复杂度：平均时间复杂度：O(nlog(n)) 最坏时间复杂度：O(n^2)
+    空间复杂度：O(log(n))
+    """
+    if len(unsort_list) < 1:
         return unsort_list
 
-    p = unsort_list[0]
-    greater_list = [x for x in unsort_list[1:] if x > p]
-    less_list = [x for x in unsort_list[1:] if x <= p]
-    return quick_sort(less_list) + [p] + quick_sort(greater_list)
+    tmp = unsort_list[0]
+    less_list = [x for x in unsort_list[1:] if x <= tmp]
+    greater_list = [x for x in unsort_list[1:] if x > tmp]
+    return quick_sort(less_list) + [tmp] + quick_sort(greater_list)
 
 
 if __name__ == "__main__":
