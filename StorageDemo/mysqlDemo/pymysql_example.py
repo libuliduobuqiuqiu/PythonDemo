@@ -30,7 +30,6 @@ class MysqlClient:
         if hasattr(self, "connect"):
             self.connect.close()
 
-
 def exec_sql(setting: MysqlSetting, db_name: str, sql_str: str, sql_args: list):
     with MysqlClient(setting, db_name) as connect:
         with connect.cursor() as cursor:

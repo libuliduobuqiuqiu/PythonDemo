@@ -9,10 +9,13 @@ if __name__ == "__main__":
         host=AliyunSetting.HOST,
         user=AliyunSetting.USERNAME,
         password=AliyunSetting.PASSWORD,
-        database='test'
+        port=AliyunSetting.PORT,
+        database='flask'
     )
     cursor = conn.cursor()
-    sql = "select * from user where user_name = 'mbb'"
+    sql = "select * from user"
     cursor.execute(sql)
     data = cursor.fetchall()
-    print(data)
+
+    for item in data:
+        print(item)
