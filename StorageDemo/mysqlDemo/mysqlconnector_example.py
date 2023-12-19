@@ -4,7 +4,7 @@ from mysql.connector import cursor
 from setting import AliyunSetting
 import mysql.connector
 
-if __name__ == "__main__":
+def mysql_connector_exec():
     conn = mysql.connector.connect(
         host=AliyunSetting.HOST,
         user=AliyunSetting.USERNAME,

@@ -12,3 +12,6 @@ setting.py
 venv/*
 
 CompanyDemo/
+
+# pyright Config file
+pyrightconfig.json
