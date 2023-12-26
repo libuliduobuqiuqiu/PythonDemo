@@ -13,8 +13,10 @@ async def hello_world():
     await asyncio.sleep(2)
     print("world")
 
-async def hello_task():
-    await asyncio.gather(hello_world())
+async def print_hello():
+    task = asyncio.create_task(hello_world())
+    await task
+
 
 
 async def app(scope, receive, send):
@@ -29,15 +31,25 @@ async def app(scope, receive, send):
         ]
     })
 
-    await hello_task()
+    # await print_hello()
+    
+    for chunk in [b'hello', b'', b'world']:
+        await send({
+            "type": "http.response.body",
+            "body": chunk,
+            "more_body": True
+        })
+        await asyncio.sleep(1)
 
     await send({
         "type": "http.response.body",
-        "body": b"hello,world"
+        "body": b"start"
     })
 
-if __name__ == "__main__":
-    config = uvicorn.Config('asgi_server:app', port=7878, log_level="info")
+async def main():
+    config = uvicorn.Config('asgi_server:app', port=80, log_level="info")
     server = uvicorn.Server(config=config)
-    server.run()
-    
+    await server.serve()
+
+if __name__ == "__main__":
+    asyncio.run(main())
