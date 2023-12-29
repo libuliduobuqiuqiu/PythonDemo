@@ -20,14 +20,15 @@ CAR_INFO = {}
 
 
 def get_info(query_string, storage_data):
-    name_info = re.search(r"name=(?P<name>\w+)", query_string)
+    name_info = re.search(r"name=(?P<name>\w+)", str(query_string))
     if name_info:
         name = name_info.groupdict()["name"]
         return storage_data.get(name, "")
 
 
 def post_info(body, storage_data):
-    data = json.loads(str(body))
+    print(body)
+    data = json.loads(body)
 
     name = data.get("name")
     info = data.get("info")
@@ -42,15 +43,15 @@ def post_info(body, storage_data):
 
 
 async def handle_get(url, query_string, send):
-    err_msg = {"code": 500, "error": ""}
+    err_msg = {"status": 500, "error": ""}
     url_dict = {
-        "person_info": partial(get_info, storage_data=PERSON_INFO),
-        "car_info": partial(get_info, storage_data=CAR_INFO),
+        "/person_info": partial(get_info, storage_data=PERSON_INFO),
+        "/car_info": partial(get_info, storage_data=CAR_INFO),
     }
 
     request_template = {
-        "type": "http.request.start",
-        "code": "",
+        "type": "http.response.start",
+        "status": "",
         "headers": [[b"content-type", b"application/json"]],
     }
 
@@ -59,42 +60,50 @@ async def handle_get(url, query_string, send):
         result = fn(query_string)
 
         if result:
-            request_template["code"] = 200
+            request_template["status"] = 200
             await send(request_template)
 
             await send(
                 {
-                    "type": "http.request.body",
+                    "type": "http.response.body",
                     "body": json.dumps(
-                        {"code": "200", "error": "", "data": result}
+                        {"status": 200, "error": "", "data": result}
                     ).encode("utf-8"),
                 }
             )
         else:
-            request_template["code"] = 500
+            request_template["status"] = 500
             await send(request_template)
 
             err_msg["error"] = "Query String Not Found"
             await send(
                 {
-                    "type": "http.request.body",
+                    "type": "http.response.body",
                     "body": json.dumps(err_msg).encode("utf-8"),
                 }
             )
     else:
-        request_template["code"] = 404
+        request_template["status"] = 404
         await send(request_template)
+
+        err_msg["status"] = 404
+        await send(
+            {
+                "type": "http.response.body",
+                "body": json.dumps(err_msg).encode("utf-8"),
+            }
+        )
 
 
 async def handle_post(url, receive, send):
-    error_msg = {"code": 500, "error": ""}
+    error_msg = {"status": 500, "error": ""}
     url_dict = {
-        "person_info": partial(post_info, storage_data=PERSON_INFO),
-        "car_info": partial(post_info, storage_data=CAR_INFO),
+        "/person_info": partial(post_info, storage_data=PERSON_INFO),
+        "/car_info": partial(post_info, storage_data=CAR_INFO),
     }
     request_template = {
-        "type": "http.request.start",
-        "code": "",
+        "type": "http.response.start",
+        "status": "",
         "headers": [[b"content-type", b"application/json"]],
     }
 
@@ -104,36 +113,43 @@ async def handle_post(url, receive, send):
         result = url_dict[url](body)
 
         if result:
-            request_template["code"] = "500"
+            request_template["status"] = 500
             await send(request_template)
 
             error_msg["error"] = result
             error_body = json.dumps(error_msg).encode("utf-8")
-            await send({"type": "http.request.body", "body": error_body})
+            await send({"type": "http.response.body", "body": error_body})
         else:
-            request_template["code"] = "200"
+            request_template["status"] = 200
             await send(request_template)
 
             await send(
                 {
-                    "type": "http.request.body",
-                    "body": json.dumps({"code": 200, "error": ""}).encode("utf-8"),
+                    "type": "http.response.body",
+                    "body": json.dumps({"status": 200, "error": ""}).encode("utf-8"),
                 }
             )
 
         return
     else:
-        request_template["code"] = 404
+        request_template["status"] = 404
         await send(request_template)
+
+        error_msg["status"] = 404
+        await send(
+            {
+                "type": "http.response.body",
+                "body": json.dumps(error_msg).encode("utf-8"),
+            }
+        )
 
 
 async def handle_http(scope, receive, send):
-    print(scope)
+    print(scope["method"], scope["path"])
 
-    asgi_info = scope["asgi"]
-    req_method = asgi_info["method"]
-    req_path = asgi_info["path"]
-    req_query_string = asgi_info["query_string"]
+    req_method = scope["method"]
+    req_path = scope["path"]
+    req_query_string = scope["query_string"]
 
     if req_method == "GET":
         await handle_get(req_path, req_query_string, send)
@@ -144,8 +160,8 @@ async def handle_http(scope, receive, send):
     else:
         await send(
             {
-                "type": "http.request.start",
-                "code": 404,
+                "type": "http.response.start",
+                "status": 404,
                 "headers": [[b"content-type", b"text/plain"]],
             }
         )
