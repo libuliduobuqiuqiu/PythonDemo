@@ -5,9 +5,14 @@
     :description: PythonDemo Main.py to setup script
 """
 
-from StorageDemo.mysqlDemo.mysqlconnector_example import mysql_connector_exec
-
+from StorageDemo.mysqlDemo.pymysql_example import (
+    count_table_rows,
+    count_table_datetime_fields,
+)
 
 
 if __name__ == "__main__":
-    mysql_connector_exec()
+    # count_table_rows()
+    results = count_table_datetime_fields()
+    for table, fields in results.items():
+        print(table, fields)
