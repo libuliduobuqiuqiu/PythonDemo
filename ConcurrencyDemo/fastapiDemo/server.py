@@ -5,12 +5,10 @@
     :description: About fastapi server
 """
 
-from re import L
-from fastapi import FastAPI, WebSocket, Request, Form, Response
+from fastapi import FastAPI, WebSocket, Request, Form, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from http_server import http_server_main
 from pydantic import BaseModel
 import uvicorn
 import asyncio
@@ -32,7 +30,7 @@ def index(request: Request):
 
 
 @app.post("/chat", response_class=HTMLResponse)
-def chat(request: Request, username: str = Form()):
+def post_chat(request: Request, username: str = Form()):
     template_response = templates.TemplateResponse(
         request=request,
         name="chat.html",
@@ -43,7 +41,7 @@ def chat(request: Request, username: str = Form()):
 
 
 @app.get("/chat")
-def chat(request: Request):
+def get_chat(request: Request):
     cookies = request.cookies
     print(cookies, type(cookies), cookies.get("username"))
     if not cookies.get("username"):
@@ -55,14 +53,45 @@ def chat(request: Request):
     )
 
 
-@app.websocket("/{client_id}")
-async def handle_websocket(websocket: WebSocket, client_id: str):
-    await websocket.accept()
+class ConnectionManager:
+    def __init__(self):
+        self.connection = {}
 
-    while True:
-        msg = await websocket.receive_text()
-        print(f"Received client{client_id}: {msg}")
-        await websocket.send_text(f"Message text was {msg}")
+    async def connect(self, client_id: str, websocket: WebSocket):
+        await websocket.accept()
+
+        self.connection[client_id] = websocket
+
+    async def disconnect(self, client_id: str, msg: str):
+        self.connection.pop(client_id)
+        await self.broadcast(client_id, msg)
+
+    async def broadcast(self, client_id: str, msg: str):
+        for client, websocket in self.connection.items():
+            if client != client_id:
+                await websocket.send_text(msg)
+
+    async def send_personal_text(self, client_id, msg: str):
+        await self.connection[client_id].send_text(msg)
+
+
+manager = ConnectionManager()
+
+
+@app.websocket("/ws/{client_id}")
+async def handle_websocket(websocket: WebSocket, client_id: str):
+    await manager.connect(client_id, websocket)
+
+    try:
+        while True:
+            msg = await websocket.receive_text()
+            await manager.broadcast(client_id, f"{client_id}: {msg}")
+            print(f"Received {client_id}: {msg}")
+            await manager.send_personal_text(client_id, f"You: {msg}")
+
+    except WebSocketDisconnect:
+        msg = f"System Manager: {client_id} left th chat."
+        await manager.disconnect(client_id, msg)
 
 
 async def server_main():
