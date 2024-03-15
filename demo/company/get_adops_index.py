@@ -6,12 +6,9 @@
 """
 import sys
 
-from pymysql import FIELD_TYPE
+sys.path.insert(0, "/data/PythonDemo/demo")
 
-
-sys.path.insert(0, "/data/PythonDemo/")
-
-from StorageDemo.mysqlDemo.pymysql_example import (
+from storage.mysql_demo.pymysql_example import (
     exec_sql,
     get_tables,
     show_table_index,

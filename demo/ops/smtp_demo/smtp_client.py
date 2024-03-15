@@ -28,12 +28,18 @@ class SmtpClient:
         self.email_password = email_password
 
     def __enter__(self):
-        self.server = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
-        self.server.set_debuglevel(1)
-        self.server.login(self.email_username, self.email_password)
+        self.connect()
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
+    def connect(self):
+        self.server = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port)
+        self.server.set_debuglevel(1)
+        self.server.login(self.email_username, self.email_password)
+
+    def close(self):
         if hasattr(self, "server"):
             self.server.quit()
 

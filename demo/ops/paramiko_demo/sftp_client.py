@@ -27,8 +27,12 @@ class F5Client:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())
         # 连接服务器
-        client.connect(hostname=self._host, port=22, username=self._username,
-                       password=self._password)
+        client.connect(
+            hostname=self._host,
+            port=22,
+            username=self._username,
+            password=self._password,
+        )
         self._client = client
 
     def open_sftp(self):
@@ -36,7 +40,9 @@ class F5Client:
             self.open()
 
         if self._client:
-            sftp_client = paramiko.SFTPClient.from_transport(self._client.get_transport())
+            sftp_client = paramiko.SFTPClient.from_transport(
+                self._client.get_transport()
+            )
             self._client.open_sftp()
             self._sftp_client = sftp_client
 
@@ -56,13 +62,14 @@ class F5Client:
 
         if not out:
             err = stderr.read()
-            return "", str(err, encoding='utf-8')
+            return "", str(err, encoding="utf-8")
         else:
             return str(out, encoding="utf-8"), ""
 
 
 if __name__ == "__main__":
     import re
+
     with open("D://vlan.txt", "r") as f:
         content = f.read()
 
@@ -86,10 +93,9 @@ if __name__ == "__main__":
     for trunk_item in trunk_list:
         trunk_name = trunk_item[0]
         trunk_interfaces = trunk_item[1]
-        
+
         interfaces = trunk_interfaces.split()
         print(trunk_name, interfaces)
-
 
     # client.open_sftp()
 

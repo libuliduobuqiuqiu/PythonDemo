@@ -8,7 +8,7 @@ from update_project import update_project_excutable
 
 update_project_excutable()
 
-from StorageDemo.mysqlDemo.pymysql_example import exec_sql
+from storage.mysql_demo.pymysql_example import exec_sql
 from setting import CompanySetting57
 
 

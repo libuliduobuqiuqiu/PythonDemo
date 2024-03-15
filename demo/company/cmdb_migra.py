@@ -5,7 +5,7 @@
     :description: About Device
 """
 
-ad_fields = '''
+ad_fields = """
     project_id,
     name,
     ip,
@@ -21,9 +21,9 @@ ad_fields = '''
     upload_credentials,
     maintenance_start,
     maintenance_end 
-'''
+"""
 
-ad_device_fields = '''
+ad_device_fields = """
     project_id,
     name,
     address,
@@ -39,13 +39,14 @@ ad_device_fields = '''
     upload_credentials,
     maintenance_start_date,
     maintenance_end_date 
-'''
+"""
 
 from cmdb_update import init_connect
 from setting import CompanySetting
-from StorageDemo.mysqlDemo.pymysql_example import exec_sql
+from storage.mysql_demo.pymysql_example import exec_sql
 
 import datetime
+
 
 def gen_ad_data():
     tmp_ad_fields = "".join(ad_fields.split())
@@ -63,7 +64,6 @@ def gen_ad_data():
     for item in results:
         tmp_dict = {}
         for k, field in enumerate(ad_field_list):
-
             tmp_value = item[ad_device_field_list[k]]
             if isinstance(tmp_value, datetime.date):
                 tmp_value = tmp_value.strftime("%Y-%m-%d")
