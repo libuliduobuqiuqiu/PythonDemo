@@ -9,13 +9,6 @@
 from email.header import Header
 from email.mime.text import MIMEText
 import smtplib
-import sys
-
-sys.path.insert(0, "/data/PythonDemo/")
-
-from setting import CompanyMailSetting as my_mail
-
-# from setting import PMSMailSetting as my_mail
 
 
 class SmtpClient:
@@ -53,14 +46,3 @@ class SmtpClient:
             raise Exception("Smtp Server not connected. Please check the code.")
 
         self.server.sendmail(from_addr, [to_addr], msg.as_string())
-
-
-if __name__ == "__main__":
-    with SmtpClient(
-        my_mail.SMTP_SERVER,
-        my_mail.SMTP_PORT,
-        my_mail.SMTP_USERNAME,
-        my_mail.SMTP_PASSWORD,
-    ) as s:
-        print("sending msg...")
-        s.send_msg(my_mail.FROM_ADDR, my_mail.TO_ADDR, "test send email", "hello,world")
