@@ -11,7 +11,9 @@ import sys
 sys.path.insert(0, "/data/PythonDemo/")
 
 from demo.ops.smtp_demo.smtp_client import SmtpClient
-from demo.setting import PersonalMailSetting as mail
+
+# from demo.setting import PersonalMailSetting as mail
+from demo.setting import CompanyMailSetting as mail
 
 
 class TestSmtpClient(TestCase):

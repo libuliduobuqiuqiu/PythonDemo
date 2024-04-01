@@ -11,7 +11,8 @@ setting.py
 # 虚拟环境
 venv/*
 
-CompanyDemo/
+# 环境
+companyscript
 
 # pyright Config file
 pyrightconfig.json
