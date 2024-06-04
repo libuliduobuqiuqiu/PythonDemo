@@ -1,7 +1,7 @@
 """
     :Date: 2024-5-28
     :Author: linshukai
-    :Description: About calculator
+    :Description: About Time calculator(时间计算器)
 """
 
 

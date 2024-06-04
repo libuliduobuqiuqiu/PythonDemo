@@ -1,7 +1,7 @@
 """
     :Date: 2024-5-28
     :Author: linshukai
-    :Description: about arithmetic formatter
+    :Description: about arithmetic formatter(算术格式化程序)
 """
 
 
