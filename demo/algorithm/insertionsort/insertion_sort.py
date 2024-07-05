@@ -16,7 +16,7 @@ def insertion_sort(unsort_list: list):
         index_key = unsort_list[tmp_index]
         compare_index = tmp_index - 1
 
-        while compare_index > 0 and index_key < unsort_list[compare_index]:
+        while compare_index >= 0 and index_key < unsort_list[compare_index]:
             unsort_list[compare_index + 1] = unsort_list[compare_index]
             compare_index -= 1
 
@@ -26,6 +26,7 @@ def insertion_sort(unsort_list: list):
 
 
 if __name__ == "__main__":
-    unsort = [1, 23, 31, 2, 3, 1, 22, 11, 11, 23, 1, 2, 3]
+    unsort = [33, 1, 23, 31, 2, 3, 1, 22, 11, 11, 23, 1, 2, 3]
     insertion_sort(unsort)
     print(unsort)
+

@@ -24,3 +24,4 @@ if __name__ == "__main__":
     unsort = [1, 23, 31, 2, 3, 1, 22, 11, 11, 23, 1, 2, 3]
     unsort = quick_sort(unsort)
     print(unsort)
+

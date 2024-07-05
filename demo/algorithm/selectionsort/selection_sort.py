@@ -23,7 +23,10 @@ def selection_sort(unsort_list: list):
             tmp_index += 1
 
         if exchange_index != index:
-            unsort_list[index], unsort_list[exchange_index] = unsort_list[exchange_index], unsort_list[index]
+            unsort_list[index], unsort_list[exchange_index] = (
+                unsort_list[exchange_index],
+                unsort_list[index],
+            )
 
         index += 1
 

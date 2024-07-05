@@ -8,8 +8,8 @@
 
 def merge_sort(unsort_list: list):
     """
-        时间复杂度：O(nlogn)
-        空间复杂度：O(n)
+    时间复杂度：O(nlogn)
+    空间复杂度：O(n)
     """
     if len(unsort_list) <= 1:
         return unsort_list
@@ -29,7 +29,6 @@ def merge(left: list, right: list):
     sort_list = []
 
     while i < len(left) and j < len(right):
-
         if left[i] < right[j]:
             sort_list.append(left[i])
             i += 1

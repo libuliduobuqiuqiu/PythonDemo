@@ -20,7 +20,10 @@ def bubble_sort(unsort_list: list):
 
         while tmpIndex < len(unsort_list):
             if unsort_list[index] > unsort_list[tmpIndex]:
-                unsort_list[index], unsort_list[tmpIndex] = unsort_list[tmpIndex], unsort_list[index]
+                unsort_list[index], unsort_list[tmpIndex] = (
+                    unsort_list[tmpIndex],
+                    unsort_list[index],
+                )
             tmpIndex += 1
         index += 1
 
