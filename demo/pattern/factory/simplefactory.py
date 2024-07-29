@@ -13,7 +13,6 @@ class BYD:
 
 
 class SimpleFactory:
-
     @staticmethod
     def factory_car(car_name):
         if car_name == "bmw":
